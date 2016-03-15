@@ -37,6 +37,8 @@ del dictionary["one"]
 del dictionary["two"]
 # and now reprint to show what the new dictionary looks like
 print dictionary
+print "#####################################################################"
+print
 
 ########################################################################################################################
 # here i will looking at dictionaries as a map. in the first dictionary i am creating a key value relationship
@@ -85,6 +87,8 @@ for student in student_courses:
         student_professors[student].add(course_professors[course])
 # now i will print "student_professors" new dictionary to see what it looks like.
 print student_professors
+print "#####################################################################"
+print
 
 ########################################################################################################################
 # creating dictionaries
@@ -136,6 +140,8 @@ print "the original ys: ", ys
 # after the next line the key value pair 1:0 should be changed to 1:1 and the 4:6 should stay the same.
 ys.update(xs)
 print "the ys dictionary: ", ys
+print "#####################################################################"
+print
 
 ########################################################################################################################
 # below is a bit of code that will show all the methods that are available to the dictionary. this piece of
@@ -146,6 +152,8 @@ print "the ys dictionary: ", ys
 print dir({})
 # and this will only print the methods that do not have the double underscore
 print [attr for attr in dir({}) if '__' not in attr]
+print "#####################################################################"
+print
 
 ########################################################################################################################
 # dict.clear clears the contents of the dictionary without actually destroying the dictionary. therefore the
@@ -172,6 +180,8 @@ ys = xs.copy()
 # now i am clearing the second dictionary in xs:
 xs["one"].clear()
 print "the ys after clearing the second dictionary: ", ys
+print "#####################################################################"
+print
 
 ########################################################################################################################
 # the dict.get method gets the value if one exist and if it does not then by default returns None. however, we
@@ -186,3 +196,66 @@ print xs.get(9)
 # to avoid the None i can set my own default, in this case i choose what i want to return if the key
 # is not in the dictionary
 print xs.get(9, "my_default")
+print "#####################################################################"
+print
+
+########################################################################################################################
+# the dict.pop method retrieves the element at the key and also removes it at the same time.
+# in the example below there are three key value pairs and the pop method will pop the element that matches the key.
+xs = {"uno":"one", "dos":"two", "tres":"three"}
+# print out the dictionary to see what I get
+print "printing the xs dictionary before i pop ", xs # i get {'dos': 'two', 'tres': 'three', 'uno': 'one'}
+xs.pop("uno") # this will not print unless i use the print method
+print "print the xs dictionary after the pop", xs
+# with the pop method we can also send as a parameter a default value that we want displayed if the key is not
+# there. in the example below i will be trying to pop the value with the "uno" key again but will set a default.
+xs.pop("uno", "myDefault") # this will not print unless i use the print method
+# use the print method for the line above
+print xs.pop("uno", "myDefault") # this line will actually print "myDefault"
+# the popitem method is similar, however, when used with the print method it will print out both the key and the
+# value. this method cannot guarantee which item is being popped, because the popitem method only takes
+# self as a parameter.
+print xs.popitem() # don't know which one it will pop
+print "#####################################################################"
+print
+
+########################################################################################################################
+# in this segment we will be looking at iterkeys, itervalues, iteritems, viewkeys, viewvalues, viewitems.
+# when iterating over a dictionary it will always iterate over the keys. the next example shows this to
+# be true
+xs = {"uno":"one", "dos":"two", "tres":"three"}
+for key in xs: # the word key is arbitrary and does not mean it is there to specify we want the key from the dictionary
+    print(key)
+# in python 2 the .keys() method actually creates a copy of the list and therefore may take an impact on
+# performance depending the size of the dictionary. therefor a solution is to use the iterkeys, itervalues and
+# iteritems instead so that no copy is taken and only the key is looked at in the for loop.
+print "going to iterate through the keys of ",xs
+for key in xs.iterkeys():
+    print key
+# look at the values in the dictionary
+print "going to iterate through the values of ",xs
+for value in xs.itervalues():
+    print value
+# look at the items (key value pair)
+print "going to iterate through the items of ",xs
+for item in xs.iteritems():
+    print item
+# the viewkeys, viewvalues and viewitems are actual views into the dictionary. what this means is that if the
+# dictionary changes then it will retain the changes in the new dictionary
+xs = {"uno":"one", "dos":"two", "tres":"three"}
+# creating the dictionary ys and passing it a view (a view in this case is constant, so what this means
+# is that if xs is changed in any way then it will reflect in dictionary ys. however if xs is reassigned
+# a new dictionary object then it will not reflect in ys
+ys = xs.viewkeys()
+print "printing the original ys after the viewkeys method ", ys
+# manipulating xs to add another item {"cuatro":"four"}
+xs["cuatro"] = "four"
+print "printing out the xs dictionary with the changes ", xs
+print "printing out the ys dictionary after the changes to xs ", ys
+# now i will assign xs a whole new dictionary object
+xs = {"not":"in", "the":"first", "dict":"xs"}
+print "the new xs ", xs
+# when i print ys dictionary i should see the old xs values
+print "the ys dictionary after the xs was changed ", ys
+# watch the last part of Dict.Keys, Dict.Values and Dict.Items for the last example of deleting items from
+# a dictionary
