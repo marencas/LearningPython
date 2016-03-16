@@ -5,7 +5,7 @@
 # dictionaries can also be referred to as:
 # - lookup-table
 # - map
-# - content-addressible storage
+# - content-addressable storage
 # - relation
 # - hash
 # - also: associative array, symbol, table
@@ -257,9 +257,16 @@ xs = {"not":"in", "the":"first", "dict":"xs"}
 print "the new xs ", xs
 # when i print ys dictionary i should see the old xs values
 print "the ys dictionary after the xs was changed ", ys
-# watch the last part of Dict.Keys, Dict.Values and Dict.Items for the last example of deleting items from
-# a dictionary
-# some more changes
-# another change to test git
-# one more for the road
-# sorry just one more for sure now
+# below is a sample of how to erase from a dictionary by using a set. because trying to delete in a for loop
+# will throw an error.
+xs = {"calculus":"Prof Yoda", "algebra":"Prof Pinky", "finite":"Prof TheBrain"}
+print "the dictionary before i do any deleting: ", xs
+delete_set = set() # this set will store the keys that i want to delete
+for key in xs:
+    if key in ("algebra", "calculus"):
+        delete_set.add(key) # if the above is true then it will add to the set.
+print "this is the set of keys that i got from the for loop above, i will use these next to delete ", delete_set
+# now i am going to use the set to go into the dictionary and delete using the set information as keys.
+for key in delete_set:
+    del xs[key]
+print "now this is the xs after the for loop that used the set to delete the items from xs dictionary ", xs
