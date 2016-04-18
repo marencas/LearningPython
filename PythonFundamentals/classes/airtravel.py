@@ -52,7 +52,7 @@ class Flight:
         if row not in rows:
             raise ValueError("Invalid row number {}".format(row))
 
-        return row, seat
+        return row, letter
 
     def allocate_seat(self, seat, passenger):
         """Allocate a seat to a passenger.
@@ -91,6 +91,25 @@ class Flight:
         self._seating[to_row][to_letter] = self._seating[from_row][from_letter]
         self._seating[from_row][from_letter] = None
 
+    def num_available_seats(self):
+        return sum(sum(1 for s in row.values() if s is None)
+                   for row in self._seating
+                   if row is not None)
+
+    def make_boarding_cards(self, card_printer):
+        for passenger, seat in sorted(self._passenger_seats()):
+            card_printer(passenger, seat, self.number(), self.aircraft_model())
+
+    def _passenger_seats(self):
+        """An iterable series of passenger seating allocations."""
+        row_numbers, seat_letters = self._aircraft.seating_plan()
+        for row in row_numbers:
+            for letter in seat_letters:
+                passenger = self._seating[row][letter]
+                if passenger is not None:
+                    yield (passenger, "{}{}".format(row, letter))
+
+
 class Aircraft:
 
     def __init__(self, registration, model, num_rows, num_seats_per_row):
@@ -108,3 +127,27 @@ class Aircraft:
     def seating_plan(self):
         return (range(1, self._num_rows + 1),
                 "ABCDEFGHJK"[:self._num_seats_per_row])
+
+
+def make_flight():
+    f = Flight("BA1234", Aircraft("D-GER", "Boeing 777", num_rows=21, num_seats_per_row=6))
+    f.allocate_seat("12A", "Jenny Celly")
+    f.allocate_seat("15F", "Martin Castillo")
+    f.allocate_seat("1E", "Mateo Castillo")
+    f.allocate_seat("20D", "Leilah Castillo")
+    f.allocate_seat("21C", "Nelly Vernaza")
+    return f
+
+
+def console_card_printer(passenger, seat, flight_nuimber, aircraft):
+    output = "| Name: {0}"      \
+             "  Flight: {1}"    \
+             "  Seat: {2}"      \
+             "  Aircraft: {3}"  \
+             " |".format(passenger, flight_nuimber, seat, aircraft)
+    banner = '+' + '-' * (len(output) - 2) + '+'
+    border = '|' + ' ' * (len(output) - 2) + '|'
+    lines = [banner, border, output, border, banner]
+    card = '\n'.join(lines)
+    print(card)
+    print()
