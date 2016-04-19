@@ -112,31 +112,49 @@ class Flight:
 
 class Aircraft:
 
-    def __init__(self, registration, model, num_rows, num_seats_per_row):
+    def __init__(self, registration):
         self._registration = registration
-        self._model = model
-        self._num_rows = num_rows
-        self._num_seats_per_row = num_seats_per_row
 
     def registration(self):
         return self._registration
 
+    def num_seats(self):
+        rows, row_seats = self.seating_plan()
+        return len(rows) * len(row_seats)
+
+
+class AirbusA319(Aircraft):
+
     def model(self):
-        return self._model
+        return "Airbus 319"
 
     def seating_plan(self):
-        return (range(1, self._num_rows + 1),
-                "ABCDEFGHJK"[:self._num_seats_per_row])
+        return range(1, 23), "ABCDEF"
 
 
-def make_flight():
-    f = Flight("BA1234", Aircraft("D-GER", "Boeing 777", num_rows=21, num_seats_per_row=6))
+class Boeing777(Aircraft):
+
+    def model(self):
+        return "Boeing 777"
+
+    def seating_plan(self):
+        return range(1, 56), "ABCDEGHJK"
+
+
+def make_flights():
+    f = Flight("BA1234", AirbusA319("B-DGED"))
     f.allocate_seat("12A", "Jenny Celly")
     f.allocate_seat("15F", "Martin Castillo")
     f.allocate_seat("1E", "Mateo Castillo")
     f.allocate_seat("20D", "Leilah Castillo")
     f.allocate_seat("21C", "Nelly Vernaza")
-    return f
+
+    g = Flight("AC1287", Boeing777("K-IEHD"))
+    g.allocate_seat("55K", "Elton John")
+    g.allocate_seat("33G", "Yoko Ono")
+    g.allocate_seat("4A", "Prince")
+    g.allocate_seat("4B", "Dave Matthews")
+    return f, g
 
 
 def console_card_printer(passenger, seat, flight_nuimber, aircraft):
