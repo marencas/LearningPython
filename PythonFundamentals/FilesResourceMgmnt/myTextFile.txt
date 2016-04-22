@@ -1,0 +1,2 @@
+Hello, my name is Martin and I am learning python
+If I learn to master this language I may be able to work from home.
